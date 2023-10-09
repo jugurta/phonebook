@@ -1,0 +1,102 @@
+openapi: "3.0.3"
+info:
+  description: "This project provides endpoints for creating and getting Persons"
+  version: "@project.version@"
+  title: "Person API"
+  contact:
+    email: "jugurtaaito@gmail.com"
+paths:
+  /person:
+    post:
+      tags:
+        - Person API
+      description: Create a Person
+      operationId: createPerson
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDTO'
+      responses:
+        200:
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDTO'
+    get:
+      tags:
+        - Person API
+      description: get a person with given id
+      operationId: getAllPersons
+      responses:
+        '200':
+          description: List of persons
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/PageablePersonDTO'
+
+  /person/{id}:
+    get:
+      tags:
+        - Person API
+      description: get a person with given id
+      operationId: getPerson
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: the person with specified ID
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/PersonDTO'
+    delete:
+      tags:
+        - Person API
+      description: Deletes a specific Person by its ID.
+      operationId: deletePerson
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Person deleted successfully.
+components:
+  schemas:
+    PageablePersonDTO:
+      description: a page of persons
+      required: [ personsList, count ]
+      title: PageablePersonDTO
+      type: object
+      properties:
+        count:
+          type: integer
+        personsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonDTO'
+    PersonDTO:
+      description: Person DTO
+      title: PersonDTO
+      type: object
+      required: [ id, firstName, lastName, birthDate ]
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        birthDate:
+          type: string
+          format: date

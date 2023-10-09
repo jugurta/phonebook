@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.jai</groupId>
+    <artifactId>phonebook</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+    <name>phonebook</name>
+    <description>phonebook</description>
+    <modules>
+        <module>phonebook--core</module>
+        <module>phonebook--api</module>
+    </modules>
+    <properties>
+        <java.version>17</java.version>
+        <revision>1.0.0</revision>
+        <map-struct.version>1.5.5.Final</map-struct.version>
+        <pi-test-version>1.15.0</pi-test-version>
+        <pitest-junit5.version>1.2.0</pitest-junit5.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+        </dependency>
+
+        <!--    Utils dependencies -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${map-struct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- Test Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Maven compiler for annotation processing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${map-struct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+            <!-- Maven compiler to execute the unit tests of an application -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Test*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <!-- Pi test plugin for mutation tests -->
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>${pi-test-version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>${pitest-junit5.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <targetClasses>
+                        <param>com.jai.*</param>
+                    </targetClasses>
+                    <excludedClasses>
+                        <param>com.jai.*.domain.model.*</param>
+                        <param>com.jai.*.infrastructure.out.persistence.mongodb.entity</param>
+                    </excludedClasses>
+                    <targetTests>
+                        <param>com.jai.*</param>
+                    </targetTests>
+                    <excludedTestClasses>
+                        <param>com.jai.*.integration*</param>
+                    </excludedTestClasses>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

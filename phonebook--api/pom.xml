@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.jai</groupId>
+        <artifactId>phonebook</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>phonebook--api</artifactId>
+    <name>phonebook--api</name>
+    <description>phonebook--api</description>
+    <properties>
+        <java.version>17</java.version>
+        <openapi-generator.version>7.0.1</openapi-generator.version>
+        <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
+        <jackson-nullable.version>0.2.6</jackson-nullable.version>
+    </properties>
+
+    <dependencies>
+        <!-- Spring Dependencies-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <!-- Utils -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <!-- OpenApi generator dependencies -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <version>${springdoc-openapi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${jackson-nullable.version}</version>
+        </dependency>
+        <!-- Internal -->
+        <dependency>
+            <groupId>com.jai</groupId>
+            <artifactId>phonebook--core</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- Internal Test -->
+        <dependency>
+            <groupId>com.jai</groupId>
+            <artifactId>phonebook--core</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <skipValidateSpec>true</skipValidateSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/openapi.yml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <configOptions>
+                                <openApiNullable>true</openApiNullable>
+                                <reactive>true</reactive>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <library>spring-boot</library>
+                                <apiPackage>${project.groupId}.infrastructure.in.rest.controller</apiPackage>
+                                <modelPackage>${project.groupId}.api.infrastructure.in.rest.dto</modelPackage>
+                                <useResponseEntity>false</useResponseEntity>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
