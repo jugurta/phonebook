@@ -8,8 +8,13 @@ management:
     include: health,info,metrics,prometheus
 spring:
   profiles:
-    active: ${ACTIVE_PROFILE:dev}
+    active: ${ACTIVE_PROFILE:dev,auth}
   data:
     mongodb:
       database: ${DATABASE_NAME:personal-db}
       uri: ${DATABASE_URI:mongodb://test:test@localhost:27017/?retryWrites=true&w=majority}
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          jwk-set-uri: ${JWT_PROVIDER_URI:http://localhost:8085/realms/custom_realm/protocol/openid-connect/certs}

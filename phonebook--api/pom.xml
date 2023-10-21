@@ -29,6 +29,10 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
         <!-- Utils -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -58,7 +62,7 @@
         <dependency>
             <groupId>com.jai</groupId>
             <artifactId>phonebook--core</artifactId>
-            <type>test-jar</type>
+            <classifier>tests</classifier>
             <scope>test</scope>
             <version>${revision}</version>
         </dependency>

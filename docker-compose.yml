@@ -1,11 +1,7 @@
 version: '3.7'
 
 services:
-  redis:
-    image: redis:latest
-    container_name: redis-phonebook
-    ports:
-      - "6379:6379"
+
   mongodb:
     image: mongo:latest
     container_name: mongodb-phonebook
@@ -16,3 +12,13 @@ services:
       MONGO_INITDB_DATABASE: personal-db
     ports:
       - "27017:27017"
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak-phonebook
+    restart: always
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8085:8080"
+    command: start-dev
