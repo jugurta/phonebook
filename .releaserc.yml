@@ -1,0 +1,72 @@
+branches: "main"
+preset: "angular"
+tagFormat: "${version}"
+repositoryUrl: "https://github.com/jugurta/phonebook.git"
+plugins:
+  - "@semantic-release/commit-analyzer"
+  - "@semantic-release/release-notes-generator"
+  - "@semantic-release/changelog"
+ # - "@semantic-release/exec"
+
+analyzeCommits:
+  - path: "@semantic-release/commit-analyzer"
+    parserOpts:
+      noteKeywords:
+        - "BREAKING CHANGE"
+        - "BREAKING CHANGES"
+    releaseRules:
+      - breaking: true
+        release: "major"
+      - type: "docs"
+        release: false
+      - type: "chore"
+        release: "patch"
+      - type: "feat"
+        release: "patch"
+      - type: "fix"
+        release: "patch"
+      - type: "refactor"
+        release: "patch"
+      - type: "breaking"
+        release: "major"
+generateNotes:
+  - path: "@semantic-release/release-notes-generator"
+    writerOpts:
+      groupBy: "type"
+      commitGroupsSort:
+        - "feat"
+        - "perf"
+        - "fix"
+      commitsSort: "header"
+    types:
+      - type: "feat"
+      - section: "Features"
+      # Tracked bug fix with a hotfix branch
+      - type: "fix"
+      - section: "Bug Fixes"
+      - type: "docs"
+      - hidden: true
+      - type: "doc"
+      - hidden: true
+      - type: "style"
+      - hidden: true
+      - type: "refactor"
+      - hidden: true
+      - type: "perf"
+      - hidden: true
+      - type: "test"
+      - hidden: true
+    presetConfig: true
+
+prepare:
+ # - path: "@semantic-release/exec"
+ #   prepareCmd: "./.github/scripts/prepare-release.sh ${nextRelease.version}"
+  - path: "@semantic-release/git"
+    assets:
+      - "CHANGELOG.md"
+      - "pom.xml"
+    message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+  - path: "@semantic-release/changelog"
+
+publish:
+  - path: "@semantic-release/github"
